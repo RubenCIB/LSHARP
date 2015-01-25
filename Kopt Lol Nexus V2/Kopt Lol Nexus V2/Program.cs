@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Principal;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using LeagueSharp.Common;
 using LeagueSharp;
-using System.Drawing;
-using SharpDX;
-using SharpDX.Direct3D9;
+
 namespace Kopt_Lol_Nexus_V2
 {
     class Program
@@ -33,13 +24,13 @@ namespace Kopt_Lol_Nexus_V2
         private static List<string> defensa = new List<string>();
         private static List<string> utilidad = new List<string>();
         private static LeagueSharp.Common.Menu gui;
-        private static int LastLaugh;
+       
         private static int cantidad = 0;
         static void Main(string[] args)
         {
             
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            
             
         }
 
@@ -54,51 +45,52 @@ namespace Kopt_Lol_Nexus_V2
            var press= gui.AddItem(new MenuItem("show", "Print Info").SetValue(new KeyBind(73, KeyBindType.Press)));
             gui.AddToMainMenu();
             Navegar();
+         
+
             press.ValueChanged += delegate(object sender, OnValueChangeEventArgs EventArgs)
             {
-                
-                //Console.Write("asds");
+
+
+              
+
+                if (gui.Item("show").GetValue<KeyBind>().Active)
+                {
+                    if (gui.Item("show_level").GetValue<bool>() & gui.Item("show_masteries").GetValue<bool>())
+                    {
+
+
+                        imprimir_todo();
+                        return;
+                    }
+
+                    if (gui.Item("show_level").GetValue<bool>())
+                    {
+
+
+                        imprimir_nivel();
+                        return;
+                    }
+                    if (gui.Item("show_masteries").GetValue<bool>())
+                    {
+
+
+                        imprimir_maestrias();
+                        return;
+                    }
+
+                    if (!gui.Item("show_masteries").GetValue<bool>() & !gui.Item("show_masteries").GetValue<bool>())
+                    {
+
+
+                        imprimir_solo();
+                        return;
+                    }
+                }
             };
+
         }
-
-
-      
-        private static void Game_OnGameUpdate(EventArgs args)
-    {
 
        
-
-
-            if (gui.Item("show").GetValue<KeyBind>().Active)
-        {
-            if (gui.Item("show_level").GetValue<bool>() & gui.Item("show_masteries").GetValue<bool>())
-            { 
-
-                
-                imprimir_todo();
-            }
-            
-            if (gui.Item("show_level").GetValue<bool>())
-            {
-
-
-                imprimir_nivel();
-            }
-            if ( gui.Item("show_masteries").GetValue<bool>())
-            {
-
-
-                imprimir_maestrias();
-            }
-
-            if (!gui.Item("show_masteries").GetValue<bool>() & !gui.Item("show_masteries").GetValue<bool>())
-            {
-
-
-                imprimir_solo();
-            }
-        }
-    }
         
           
             static void Navegar()
@@ -209,7 +201,7 @@ namespace Kopt_Lol_Nexus_V2
                        continue;
                    }
                }
-               Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] + close + "-->" + amarillo+ ataque[i] + defensa[i] + utilidad[i]+close);
+               Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close + "-->" + amarillo+ ataque[i] + defensa[i] + utilidad[i]+close);
                 
             }
           
@@ -219,9 +211,27 @@ namespace Kopt_Lol_Nexus_V2
         {
 
 
-            for (int i = 0; i < camp.Count; i++)
+           for (int i = 0; i<camp.Count ; i++)
             {
-                Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" +close +"--->" + lila+ liga[i].ToUpper() + " (" + puntos[i] + close);
+               if (cantidad== 10)
+                {
+                    if (i >= 5) {
+                        Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"+ close);
+                
+                        continue;
+                    }
+                }
+
+
+               if (cantidad == 6)
+               {
+                   if (i >= 3)
+                   {
+                       Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] +")"+ close);
+                       continue;
+                   }
+               }
+               Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close);
                 
             }
 
@@ -233,7 +243,26 @@ namespace Kopt_Lol_Nexus_V2
 
             for (int i = 0; i < camp.Count; i++)
             {
-                Game.PrintChat(rojo+camp[i].ToUpper() + close+ "-->" +lila+ liga[i].ToUpper() + " (" + puntos[i] + ")" + close +"--->" + amarillo+ ataque[i] + defensa[i] + utilidad[i] + close);
+                if (cantidad == 10)
+                {
+                    if (i >= 5)
+                    {
+                        Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+
+                        continue;
+                    }
+                }
+
+
+                if (cantidad == 6)
+                {
+                    if (i >= 3)
+                    {
+                        Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                        continue;
+                    }
+                }
+                Game.PrintChat(rojo + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
 
             }
 
@@ -246,7 +275,26 @@ namespace Kopt_Lol_Nexus_V2
 
             for (int i = 0; i < camp.Count; i++)
             {
-                Game.PrintChat(rojo+camp[i].ToUpper() + close+"-->" +lila+ liga[i].ToUpper() + " (" + puntos[i] +close);
+                if (cantidad == 10)
+                {
+                    if (i >= 5)
+                    {
+                        Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"  + close);
+
+                        continue;
+                    }
+                }
+
+
+                if (cantidad == 6)
+                {
+                    if (i >= 3)
+                    {
+                        Game.PrintChat(azul + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close);
+                        continue;
+                    }
+                }
+                Game.PrintChat(rojo + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close);
 
             }
 
