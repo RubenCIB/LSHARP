@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 using LeagueSharp.Common;
 using LeagueSharp;
 
@@ -17,7 +18,7 @@ namespace Kopt_Lol_Nexus_V2
         private static string amarillo = "<font color = \"#f6d313\">";
         private static string azul = "<font color = \"#0cf7e4\">";
         
-        private static List<string> lvl = new List<string>();
+       // private static List<string> lvl = new List<string>();
         private static List<string> liga = new List<string>();
         private static List<string> puntos = new List<string>();
         private static List<string> ataque = new List<string>();
@@ -38,9 +39,15 @@ namespace Kopt_Lol_Nexus_V2
         private static void Game_OnGameLoad(EventArgs args)
         {
             Game.PrintChat("<font color = \"#ff052b\">KOPT Lol Nexus</font>  <font color = \"#00FFFF\">Loaded  </font> ");
+
+            if (GetRegion() == "fail")
+            {
+                Game.PrintChat("KOREA IS NOT SUPPORTED BY LOLNEXUS");
+                return;
+            }
             gui = new LeagueSharp.Common.Menu("KOPT Lol Nexus V2", "", true);
             
-            gui.AddItem(new MenuItem("show_level", "Show Players Level").SetValue(true));
+            //gui.AddItem(new MenuItem("show_level", "Show Players Level").SetValue(true));
             gui.AddItem(new MenuItem("show_masteries", "Show Masteries").SetValue(true));
            var press= gui.AddItem(new MenuItem("show", "Print Info").SetValue(new KeyBind(73, KeyBindType.Press)));
             gui.AddToMainMenu();
@@ -55,14 +62,14 @@ namespace Kopt_Lol_Nexus_V2
 
                 if (gui.Item("show").GetValue<KeyBind>().Active)
                 {
-                    if (gui.Item("show_level").GetValue<bool>() & gui.Item("show_masteries").GetValue<bool>())
+                    if (gui.Item("show_masteries").GetValue<bool>())
                     {
 
 
                         imprimir_todo();
                         return;
                     }
-
+                    /*
                     if (gui.Item("show_level").GetValue<bool>())
                     {
 
@@ -77,8 +84,8 @@ namespace Kopt_Lol_Nexus_V2
                         imprimir_maestrias();
                         return;
                     }
-
-                    if (!gui.Item("show_masteries").GetValue<bool>() & !gui.Item("show_masteries").GetValue<bool>())
+                    */
+                    if (!gui.Item("show_masteries").GetValue<bool>())
                     {
 
 
@@ -120,23 +127,23 @@ namespace Kopt_Lol_Nexus_V2
 
         static void Obtener_datos()
         {
-            
-            while (wb.Contains("icon champions-lol-28"))
+
+            while (wb.Contains("<td class=\\\"champion\\\">"))
             {
-                string champ=(GetBetween(wb, "icon champions-lol-28", "\">"));
-                wb = wb.Replace("icon champions-lol-28" + champ, " ");
+                string champ = (GetBetween(wb, "<td class=\\\"champion\\\">\\r\\n        <i class=\\\"icon champions-lol-28", "\\\">"));
+                wb = wb.Replace("<td class=\\\"champion\\\">\\r\\n        <i class=\\\"icon champions-lol-28" + champ, " ");
                 champ= champ.Replace("\\","");
                 champ = champ.Trim();
                 
                 camp.Add(champ);
             
 
-           
+           /*
                 string level = (GetBetween(wb, "<td class=\\\"level\\\">", "</td>"));
                 wb = ReplaceFirst(wb, "<td class=\\\"level\\\">","");
                level = level.Trim();
                 lvl.Add(level);
-
+                */
 
                 string rank = (GetBetween(wb, "class=\\\"champion-ranks", "\\\">"));
                 wb = ReplaceFirst(wb, "class=\\\"champion-ranks", "");
@@ -186,7 +193,7 @@ namespace Kopt_Lol_Nexus_V2
                if (cantidad== 10)
                 {
                     if (i >= 5) {
-                        Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"+ close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                        Game.PrintChat(azul + camp[i].ToUpper() +close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"+ close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
                 
                         continue;
                     }
@@ -197,76 +204,76 @@ namespace Kopt_Lol_Nexus_V2
                {
                    if (i >= 3)
                    {
-                       Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] +")"+ close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                       Game.PrintChat(azul + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] +")"+ close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
                        continue;
                    }
                }
-               Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close + "-->" + amarillo+ ataque[i] + defensa[i] + utilidad[i]+close);
+               Game.PrintChat(rojo+camp[i].ToUpper() + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close + "-->" + amarillo+ ataque[i] + defensa[i] + utilidad[i]+close);
                 
             }
           
         }
-        
-        static void imprimir_nivel()
-        {
+
+        /*  static void imprimir_nivel()
+          {
 
 
-           for (int i = 0; i<camp.Count ; i++)
-            {
-               if (cantidad== 10)
-                {
-                    if (i >= 5) {
-                        Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"+ close);
+             for (int i = 0; i<camp.Count ; i++)
+              {
+                 if (cantidad== 10)
+                  {
+                      if (i >= 5) {
+                          Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"+ close);
                 
-                        continue;
-                    }
-                }
+                          continue;
+                      }
+                  }
 
 
-               if (cantidad == 6)
-               {
-                   if (i >= 3)
-                   {
-                       Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] +")"+ close);
-                       continue;
-                   }
-               }
-               Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close);
+                 if (cantidad == 6)
+                 {
+                     if (i >= 3)
+                     {
+                         Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] +")"+ close);
+                         continue;
+                     }
+                 }
+                 Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close);
                 
-            }
+              }
 
-        }
+          } 
 
-        static void imprimir_maestrias()
-        {
-
-
-            for (int i = 0; i < camp.Count; i++)
-            {
-                if (cantidad == 10)
-                {
-                    if (i >= 5)
-                    {
-                        Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
-
-                        continue;
-                    }
-                }
+          static void imprimir_maestrias()
+          {
 
 
-                if (cantidad == 6)
-                {
-                    if (i >= 3)
-                    {
-                        Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
-                        continue;
-                    }
-                }
-                Game.PrintChat(rojo + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+              for (int i = 0; i < camp.Count; i++)
+              {
+                  if (cantidad == 10)
+                  {
+                      if (i >= 5)
+                      {
+                          Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
 
-            }
+                          continue;
+                      }
+                  }
 
-        }
+
+                  if (cantidad == 6)
+                  {
+                      if (i >= 3)
+                      {
+                          Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                          continue;
+                      }
+                  }
+                  Game.PrintChat(rojo + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+
+              }
+
+          }*/
 
 
         static void imprimir_solo()
@@ -361,8 +368,8 @@ namespace Kopt_Lol_Nexus_V2
              }
              if (Game.Region.ToLower().Contains("kr"))
              {
-                 Game.PrintChat("KOREA IS NOT SUPPORTED BY LOLNEXUS");
-                
+                 
+                 return "fail";
              }
              if (Game.Region.ToLower().Contains("oc1"))
              {
