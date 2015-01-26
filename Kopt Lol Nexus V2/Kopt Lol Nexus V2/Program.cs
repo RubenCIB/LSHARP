@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using LeagueSharp.Common;
 using LeagueSharp;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 namespace Kopt_Lol_Nexus_V2
 {
@@ -17,13 +20,14 @@ namespace Kopt_Lol_Nexus_V2
         private static string lila = "<font color = \"#39f613\">";
         private static string amarillo = "<font color = \"#f6d313\">";
         private static string azul = "<font color = \"#0cf7e4\">";
-
-        // private static List<string> lvl = new List<string>();
+        private static string huevo = "<font color = \"#fbe600\">";
         private static List<string> liga = new List<string>();
         private static List<string> puntos = new List<string>();
         private static List<string> ataque = new List<string>();
         private static List<string> defensa = new List<string>();
         private static List<string> utilidad = new List<string>();
+        private static List<System.Drawing.Color> colores = new List<Color>();
+        private static List<string> runas = new List<string>();
         private static LeagueSharp.Common.Menu gui;
         private static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         private static int cantidad = 0;
@@ -31,8 +35,11 @@ namespace Kopt_Lol_Nexus_V2
         {
 
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-
-
+            colores.Add(System.Drawing.Color.White);
+            colores.Add(System.Drawing.Color.Red);
+            colores.Add(System.Drawing.Color.Yellow);
+            colores.Add(System.Drawing.Color.SandyBrown);
+            colores.Add(System.Drawing.Color.DodgerBlue);
         }
 
 
@@ -46,61 +53,87 @@ namespace Kopt_Lol_Nexus_V2
                 return;
             }
             gui = new LeagueSharp.Common.Menu("KOPT Lol Nexus V2", "", true);
-
-            //gui.AddItem(new MenuItem("show_level", "Show Players Level").SetValue(true));
-            gui.AddItem(new MenuItem("show_masteries", "Show Masteries").SetValue(true));
-            var press = gui.AddItem(new MenuItem("show", "Print Info").SetValue(new KeyBind(73, KeyBindType.Press)));
+            if (Navegar() == false)
+            {
+                return;
+            };
+            
+            
+            gui.AddItem(new MenuItem("dibujar", "Draw INFO UNDER you").SetValue(new KeyBind(75, KeyBindType.Press)));
+            var press = gui.AddItem(new MenuItem("show", "Print Chat Info (NO RUNES)").SetValue(new KeyBind(73, KeyBindType.Press)));
             gui.AddToMainMenu();
-            Navegar();
-
+            
+            Drawing.OnDraw += Drawing_OnDraw;
 
             press.ValueChanged += delegate(object sender, OnValueChangeEventArgs EventArgs)
             {
+                
 
-
-
+                
 
                 if (gui.Item("show").GetValue<KeyBind>().Active)
                 {
-                    if (gui.Item("show_masteries").GetValue<bool>())
-                    {
-
+                   
+                        
 
                         imprimir_todo();
-                        return;
-                    }
-                    /*
-                    if (gui.Item("show_level").GetValue<bool>())
-                    {
-
-
-                        imprimir_nivel();
-                        return;
-                    }
-                    if (gui.Item("show_masteries").GetValue<bool>())
-                    {
-
-
-                        imprimir_maestrias();
-                        return;
-                    }
-                    */
-                    if (!gui.Item("show_masteries").GetValue<bool>())
-                    {
-
-
-                        imprimir_solo();
-                        return;
-                    }
+                       
+                    
                 }
             };
 
         }
 
 
+        static void Drawing_OnDraw(EventArgs args)
+        {
+
+            if ((gui.Item("dibujar").GetValue<KeyBind>().Active))
+            {
+                Obj_AI_Hero Player = ObjectManager.Player;
+                Vector2 worldtoscr = Drawing.WorldToScreen(Player.Position);
+                int a = -20;
+                int c = 0;
+                for (int i = 0; i < camp.Count; i++)
+                {
 
 
-        static void Navegar()
+                    Drawing.DrawText(worldtoscr[0] - 500, worldtoscr[1] - a, colores[c], camp[i].ToUpper() + "-->" + liga[i].ToUpper() + " (" + puntos[i] + ")" + "--->" + ataque[i] + defensa[i] + utilidad[i] +"--->"+ runas[i]);
+                    a = a - 20;
+
+                    if (camp.Count == 10 && i == 4)
+                    {
+                        Drawing.DrawText(worldtoscr[0] - 500, worldtoscr[1] - a, System.Drawing.Color.SeaGreen, "<--------------------------------------------------------------------------------------------------------->");
+                        a = a - 20;
+                        Drawing.DrawText(worldtoscr[0] - 500, worldtoscr[1] - a, System.Drawing.Color.SeaGreen, "<--------------------------------------------------------------------------------------------------------->");
+                        a = a - 20;
+                    }
+
+                    if (camp.Count == 6 && i == 2)
+                    {
+                        Drawing.DrawText(worldtoscr[0] - 500, worldtoscr[1] - a, System.Drawing.Color.SeaGreen, "<--------------------------------------------------------------------------------------------------------->");
+                        a = a - 20;
+                        Drawing.DrawText(worldtoscr[0] - 500, worldtoscr[1] - a, System.Drawing.Color.SeaGreen, "<--------------------------------------------------------------------------------------------------------->");
+                        a = a - 20;
+                    }
+
+                    c = c+1;
+                    if (c >= 5)
+                    {
+                        c = 0;
+                    }
+
+                }
+
+
+
+
+
+            }
+
+        }
+
+        static bool Navegar()
         {
             string url = "http://www.lolnexus.com/ajax/get-game-info/" + GetRegion() + ".json?name=" + ObjectManager.Player.Name.Replace(" ", "++");
 
@@ -110,6 +143,7 @@ namespace Kopt_Lol_Nexus_V2
             {
 
                 Obtener_datos();
+                return true;
             }
             else
             {
@@ -117,16 +151,21 @@ namespace Kopt_Lol_Nexus_V2
                 Intentos += 1;
                 if (Intentos == 5)
                 {
-                    Game.PrintChat("LOL NEXUS <font color = \"#ff052b\">IS NOT WORKING.</font> TRY RELOADING IN A FEW MINUTES");
-                    return;
+                    Game.PrintChat("LOL NEXUS <font color = \"#ff052b\">IS NOT WORKING.</font> TRY RELOADING (F5) IN A FEW MINUTES");
+                    return false;
                 }
                 Navegar();
+                return true;
             }
         }
 
 
         static void Obtener_datos()
         {
+
+            
+          
+
 
             while (wb.Contains("<td class=\\\"champion\\\">"))
             {
@@ -136,14 +175,6 @@ namespace Kopt_Lol_Nexus_V2
                 champ = champ.Trim();
 
                 camp.Add(champ);
-
-
-                /*
-                     string level = (GetBetween(wb, "<td class=\\\"level\\\">", "</td>"));
-                     wb = ReplaceFirst(wb, "<td class=\\\"level\\\">","");
-                    level = level.Trim();
-                     lvl.Add(level);
-                     */
 
                 string rank = (GetBetween(wb, "class=\\\"champion-ranks", "\\\">"));
                 wb = ReplaceFirst(wb, "class=\\\"champion-ranks", "");
@@ -172,14 +203,58 @@ namespace Kopt_Lol_Nexus_V2
                 utility = utility.Trim();
                 utilidad.Add(utility);
 
+
+                string run = (GetBetween(wb, "<div><h2>", "</span>\\r\\n"));
+                wb = ReplaceFirst(wb, "<div><h2>", " ");
+                run = (GetBetween(run, "h2>", "</div>"));
+                run = format_runes(run);
+               runas.Add(run);
+               
+                
+             
             }
 
 
-            Game.PrintChat("<font color = \"#ff052b\">DATA READY!!.</font>  <font color = \"#00FFFF\">Press key to print (i by default) </font> ");
+            Game.PrintChat("<font color = \"#ff052b\">DATA READY!!.</font>"); 
+               Game.PrintChat(rojo +"-->Print info in CHAT" + close + huevo+" (I) BY DEFAULT"+ close);
+               Game.PrintChat(rojo + "-->Draw runes UNDER your player" + close + huevo + " (K) BY DEFAULT" + close);
+               
+
+           
             cantidad = camp.Count;
 
 
 
+
+        }
+
+        static string format_runes(string runas)
+        {
+
+            runas = runas.Replace("magic penetration", "MAGIC.PEN");
+            runas = runas.Replace("ability power", "AP");
+            runas = runas.Replace("attack damage", "AD");
+            runas = runas.Replace("magic resist per level", "MAGIC.RES LVL");
+            runas = runas.Replace("at level 18", "AT LVL 18");
+            runas = runas.Replace("attack speed", "ATCK SPEED");
+            runas = runas.Replace("life steal.", "LIFE STEAL");
+            runas = runas.Replace("critical damage", "CRIT DMG");
+            runas = runas.Replace("magic resist", "MR");
+            runas = runas.Replace("armor", "ARMOR");
+            runas = runas.Replace("cooldowns", "CDR");
+            runas = runas.Replace("armor penetration", "ARMOR PEN");
+            runas = runas.Replace("magic penetration", "MAGIC PEN");
+            runas = runas.Replace("mana regen / 5 sec. per level.", "MANA.REG.LVL");
+            runas = runas.Replace("mana regen / 5 sec.", "MANA.REG");
+            runas = runas.Replace("health regen / 5 sec.", "HEALTH REG/5");
+            runas = runas.Replace("movement speed", "MOV.SPEED");
+            
+            runas = runas.Replace(Environment.NewLine, "");
+            runas= runas.Replace("<br />", "");
+            runas = runas.Replace("+", "  +");
+            runas = runas.Replace("-", "  -");
+            runas = runas.ToUpper();
+            return runas;
 
         }
 
@@ -193,7 +268,7 @@ namespace Kopt_Lol_Nexus_V2
                 if (Player.ChampionName.ToUpper() == camp[i].ToUpper())
                 {
 
-                       Game.PrintChat( camp[i].ToUpper() + azul+ "--->"+close + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                       Game.PrintChat( huevo+"--ME--" +close +"--->"+close + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
                continue;
                 }
                 if (cantidad == 10)
@@ -202,7 +277,7 @@ namespace Kopt_Lol_Nexus_V2
                  
                     if (i >= 5)
                     {
-                        Game.PrintChat(azul + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                        Game.PrintChat(azul + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close );
 
                         continue;
                     }
@@ -217,115 +292,15 @@ namespace Kopt_Lol_Nexus_V2
                         continue;
                     }
                 }
-                Game.PrintChat(rojo + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
+                Game.PrintChat(rojo + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close );
 
             }
 
         }
 
-        /*  static void imprimir_nivel()
-          {
+       
 
-
-             for (int i = 0; i<camp.Count ; i++)
-              {
-                 if (cantidad== 10)
-                  {
-                      if (i >= 5) {
-                          Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")"+ close);
-                
-                          continue;
-                      }
-                  }
-
-
-                 if (cantidad == 6)
-                 {
-                     if (i >= 3)
-                     {
-                         Game.PrintChat(azul + camp[i].ToUpper() + " (" + lvl[i] + ")" + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] +")"+ close);
-                         continue;
-                     }
-                 }
-                 Game.PrintChat(rojo+camp[i].ToUpper() + " (" + lvl[i] + ")" + close+"--->" +lila +liga[i].ToUpper() + " (" + puntos[i] +")" +close);
-                
-              }
-
-          } 
-
-          static void imprimir_maestrias()
-          {
-
-
-              for (int i = 0; i < camp.Count; i++)
-              {
-                  if (cantidad == 10)
-                  {
-                      if (i >= 5)
-                      {
-                          Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
-
-                          continue;
-                      }
-                  }
-
-
-                  if (cantidad == 6)
-                  {
-                      if (i >= 3)
-                      {
-                          Game.PrintChat(azul + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
-                          continue;
-                      }
-                  }
-                  Game.PrintChat(rojo + camp[i].ToUpper()  + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close + "-->" + amarillo + ataque[i] + defensa[i] + utilidad[i] + close);
-
-              }
-
-          }*/
-
-
-        static void imprimir_solo()
-        {
-
-
-            for (int i = 0; i < camp.Count; i++)
-            {
-                if (Player.ChampionName.ToUpper() == camp[i].ToUpper())
-                {
-
-                    Game.PrintChat(camp[i].ToUpper() + azul + "--->" + close + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close);
-                    continue;
-                }
-                if (cantidad == 10)
-                {
-                    if (i==5)
-                    {
-                        Game.PrintChat("<----------------------------------------------->");
-                    }
-                    
-                    if (i >= 5)
-                    {
-                        Game.PrintChat(azul + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close);
-
-                        continue;
-                    }
-                }
-
-
-                if (cantidad == 6)
-                {
-                    if (i >= 3)
-                    {
-                        Game.PrintChat(azul + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close);
-                        continue;
-                    }
-                }
-                Game.PrintChat(rojo + camp[i].ToUpper() + close + "--->" + lila + liga[i].ToUpper() + " (" + puntos[i] + ")" + close);
-
-            }
-
-        }
+        
 
         static string ReplaceFirst(string text, string search, string replace)
         {
