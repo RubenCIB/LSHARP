@@ -1,0 +1,16 @@
+E:\PROGRAMACION\C#\Volibot\obj\x86\Debug\RitoBot.csprojResolveAssemblyReference.cache
+E:\PROGRAMACION\C#\Volibot\obj\x86\Debug\RitoBot.csproj.GenerateResource.Cache
+E:\PROGRAMACION\C#\Volibot\obj\x86\Debug\RitoBotr.Properties.Resources.resources
+E:\PROGRAMACION\C#\Volibot\bin\Debug\Kopts Account Checker.exe.config
+E:\PROGRAMACION\C#\Volibot\bin\Debug\Kopts Account Checker.exe
+E:\PROGRAMACION\C#\Volibot\bin\Debug\Kopts Account Checker.pdb
+E:\PROGRAMACION\C#\Volibot\obj\x86\Debug\Kopts Account Checker.exe
+E:\PROGRAMACION\C#\Volibot\obj\x86\Debug\Kopts Account Checker.pdb
+E:\PROGRAMACION\C#\Kopts Account Cheker\bin\Debug\Kopts Account Checker.exe.config
+E:\PROGRAMACION\C#\Kopts Account Cheker\bin\Debug\Kopts Account Checker.exe
+E:\PROGRAMACION\C#\Kopts Account Cheker\bin\Debug\Kopts Account Checker.pdb
+E:\PROGRAMACION\C#\Kopts Account Cheker\obj\x86\Debug\RitoBot.csprojResolveAssemblyReference.cache
+E:\PROGRAMACION\C#\Kopts Account Cheker\obj\x86\Debug\RitoBotr.Properties.Resources.resources
+E:\PROGRAMACION\C#\Kopts Account Cheker\obj\x86\Debug\RitoBot.csproj.GenerateResource.Cache
+E:\PROGRAMACION\C#\Kopts Account Cheker\obj\x86\Debug\Kopts Account Checker.exe
+E:\PROGRAMACION\C#\Kopts Account Cheker\obj\x86\Debug\Kopts Account Checker.pdb
