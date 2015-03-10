@@ -13,9 +13,9 @@ namespace Random_Chat_CSHARP
     class Program
     {
 
-        private static string[] early = new string[19] { "laggg", "i hav tons of lag ", "lol", "/all do u have lag?", "omg, dis ping", "is my bro account", "follow u to the end", "/all i have best net congo", "wtff", "sureee", "im so baddd", "/all sure", "/all okk", "/all lov ya","pff",":O","gsdasd","op","free win incoming" };
-       private static string[] mid = new string[19] { "lol", "/all wp", "ok, report me", "are u serious?", "sure sureee", "ok", "yeeesss", "just play", "easy win", "/all surrender", "i suck, thats all","uffff","/all wtf","go drake","/all road to diamd","road to challenger",":D","lets do this","i cant be dat bad" };
-       private static string[] late = new string[19] {"strange game or im mad", "/all end dis plz", "/all not real", "idc", "nashor", "ok", "yaaa", "dafuq", "/all i have a good team", "/all this game is not real, is part of a nightmare or something", "this is not reaalll", "uffff", "wtf", "/all prepare for my penta bro. free win","pamplinas","this is ggwp or what","fuck this","chill","i like pizza" };
+        private static string[] early = new string[] { "laggg", "lol", "/all do u have lag?", "omg, dis ping", "is my bro account", "follow u to the end", "/all i have best net congo", "wtff", "sureee", "im so baddd", "/all sure", "/all okk", "/all lov ya","pff",":O","gsdasd","op","free win incoming","/all me corro en tu zepa","/all si te cojo te hago un manojo soplaguindas","pamplinas siempre pamplinas","/all me cago en sanpicopaco","hijo d una mosca","saltimbanki puta pepa me corro en tu oido","give me money for pizza","hijo d un sapo","me corro en tu pantorilla hijo d un duende","te follo el higadillo" };
+       private static string[] mid = new string[] { "lol", "/all wp", "ok, report me", "are u serious?", "sure sureee", "ok", "yeeesss", "just play", "easy win", "/all surrender", "i suck, thats all","uffff","/all wtf","go drake","/all road to diamd","road to challenger",":D","lets do this","i cant be dat bad","/all tragador de semen kongoniense","te follo el tuetano","me cago en mi sangre","esto es una gran pamplina","esto es una pantomima","me cago en zeus","/all eres un saltamontes", };
+       private static string[] late = new string[] {"strange game or im mad", "/all end dis plz", "/all not real", "idc", "nashor", "ok", "yaaa", "dafuq", "/all i have a good team", "/all this game is not real, is part of a nightmare or something", "this is not reaalll", "uffff", "wtf", "/all prepare for my penta bro. free win","pamplinas","this is ggwp or what","fuck this","chill","i like pizza","/all esto es una pmaplina", "/all me cago en tu zepa", "me tiro a tu perro","/all comprame una nave" };
       
         private static List<int> r_early = new List<int>();
         private static List<int> r_mid = new List<int>();
@@ -43,7 +43,7 @@ namespace Random_Chat_CSHARP
           
 
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 10; i++)
             {
                
                
@@ -87,15 +87,32 @@ namespace Random_Chat_CSHARP
                     Game.Say(early[rnd.Next(0, early.Count())].ToString());
                 }
 
-                if (Segundos==r_mid[i])
+            
+            }
+
+
+
+            for (int i = 0; i < r_mid.Count(); i++)
+            {
+             
+
+                if (Segundos == r_mid[i])
                 {
-                    
+
                     Game.Say(mid[rnd.Next(0, mid.Count())].ToString());
                 }
 
-                if (Segundos==r_late[i])
+              
+            }
+
+
+            for (int i = 0; i < r_late.Count(); i++)
+            {
+             
+
+                if (Segundos == r_late[i])
                 {
-                    
+
                     Game.Say(late[rnd.Next(0, late.Count())].ToString());
                 }
             }
