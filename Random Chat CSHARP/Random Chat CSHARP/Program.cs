@@ -12,7 +12,7 @@ namespace Random_Chat_CSHARP
 {
     class Program
     {
-
+/* MESSAGES: I did not write this. I told a friend who wrote what he wanted. WRITE WHAT YOU WANT */
         private static string[] early = new string[] { "laggg", "lol", "/all do u have lag?", "omg, dis ping", "is my bro account", "follow u to the end", "/all i have best net congo", "wtff", "sureee", "im so baddd", "/all sure", "/all okk", "/all lov ya","pff",":O","gsdasd","op","free win incoming","/all me corro en tu zepa","/all si te cojo te hago un manojo soplaguindas","pamplinas siempre pamplinas","/all me cago en sanpicopaco","hijo d una mosca","saltimbanki puta pepa me corro en tu oido","give me money for pizza","hijo d un sapo","me corro en tu pantorilla hijo d un duende","te follo el higadillo" };
        private static string[] mid = new string[] { "lol", "/all wp", "ok, report me", "are u serious?", "sure sureee", "ok", "yeeesss", "just play", "easy win", "/all surrender", "i suck, thats all","uffff","/all wtf","go drake","/all road to diamd","road to challenger",":D","lets do this","i cant be dat bad","/all tragador de semen kongoniense","te follo el tuetano","me cago en mi sangre","esto es una gran pamplina","esto es una pantomima","me cago en zeus","/all eres un saltamontes", };
        private static string[] late = new string[] {"strange game or im mad", "/all end dis plz", "/all not real", "idc", "nashor", "ok", "yaaa", "dafuq", "/all i have a good team", "/all this game is not real, is part of a nightmare or something", "this is not reaalll", "uffff", "wtf", "/all prepare for my penta bro. free win","pamplinas","this is ggwp or what","fuck this","chill","i like pizza","/all esto es una pmaplina", "/all me cago en tu zepa", "me tiro a tu perro","/all comprame una nave" };
@@ -37,13 +37,13 @@ namespace Random_Chat_CSHARP
         public static void Game_OnGameLoad(EventArgs args)
         {
            
-            Game.PrintChat("KOPT RAMDON CHAT");
+            Game.PrintChat("KOPTS RANDOM CHAT ");
 
 
           
 
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)   /* 10 means the number messages that will write in each phase of the game. Modify at your own. In this case,33.*/
             {
                
                
@@ -67,7 +67,7 @@ namespace Random_Chat_CSHARP
             {
                 Game.Say("/ff");
             }
-
+                                        /*Will try to surrender */
             if (Segundos == 1800)
             {
                 Game.Say("/ff");
